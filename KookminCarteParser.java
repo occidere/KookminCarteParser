@@ -76,7 +76,7 @@ public class KookminCarteParser {
 		for(Element res : menu){
 			tmp = removeBracket(res.text());tmp = tmp.substring(tmp.indexOf(']')+1).trim();
 			if(i>2) dinner+=(faculty+" "+tmp+"\n");//석식
-			else tmp = lunch+=(faculty+" "+tmp+"\n");//중식
+			else lunch+=(faculty+" "+tmp+"\n");//중식
 		}
 		lunch+="\n"; dinner+="\n";
 	}
