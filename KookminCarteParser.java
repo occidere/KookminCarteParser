@@ -77,6 +77,7 @@ public class KookminCarteParser {
 			tmp = removeBracket(res.text());tmp = tmp.substring(tmp.indexOf(']')+1).trim();
 			if(i>2) dinner+=(faculty+" "+tmp+"\n");//석식
 			else lunch+=(faculty+" "+tmp+"\n");//중식
+			i++;
 		}
 		lunch+="\n"; dinner+="\n";
 	}
