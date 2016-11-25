@@ -38,67 +38,62 @@ public class KookminCarteParser {
 	
 	//법식
 	private static void parseBubsik() throws Exception {
-        String bubsik = "[법식]", tmp;
-        Elements menu = jsoupConnect(address+1);
-        for (Element res : menu) {
-            tmp = removeBracket(res.text());
-            if(tmp.contains("중식")){
-            	if(tmp.contains("석식")){
-            		lunch+=bubsik+tmp.substring(tmp.indexOf("식*")+2, tmp.indexOf("*석식*"))+"\n";
-            		dinner+=bubsik+tmp.substring(tmp.indexOf("*석식*")+4)+"\n";
-            	}
-            	else lunch+=bubsik+tmp.substring(tmp.indexOf("식*")+2)+"\n";
-            }
-            else if(tmp.contains("중석식")){
-                lunch+=bubsik+tmp.substring(tmp.indexOf("식*")+2)+"\n";
-                dinner+=bubsik+tmp.substring(tmp.indexOf("식*")+2)+"\n";
-            }
-            else breakfast+=bubsik+" "+tmp+"\n";
-        }
-        breakfast+="\n"; lunch+="\n"; dinner+="\n";
-    }
+        	String bubsik = "[법식]", tmp;
+        	Elements menu = jsoupConnect(address+1);
+        	for (Element res : menu) {
+            		tmp = removeBracket(res.text());
+            		if(tmp.contains("*중식*"))lunch+=bubsik+tmp.substring(tmp.indexOf("*중식*")+4)+"\n";
+            		else if(tmp.contains("*석식*")) dinner+=bubsik+tmp.substring(tmp.indexOf("*석식*")+4)+"\n";
+            		else if(tmp.contains("*중석식*")){
+                		lunch+=bubsik+tmp.substring(tmp.indexOf("*중석식*")+5)+"\n";
+                		dinner+=bubsik+tmp.substring(tmp.indexOf("*중석식*")+5)+"\n";
+            		}
+           		else breakfast+=bubsik+" "+tmp+"\n"; //조식
+        	}
+        	breakfast+="\n"; lunch+="\n"; dinner+="\n";
+	}
 	
 	//학식
-    private static void parseHaksik() throws Exception {
-        String haksik = "[학식]", tmp;
-        Elements menu = jsoupConnect(address+2);
-        int i=0;
-        for (Element res : menu) {
-            tmp = removeBracket(res.text());
-            if(i==0) breakfast+=(haksik+" "+tmp+"\n"); //조식
-            else if(i<6) lunch+=(haksik+" "+tmp+"\n"); //중식
-            else dinner+=(haksik+" "+tmp+"\n"); //석식
-            i++;
-            if(i>8) break; //학식 중국집 메뉴는 출력 안한다.
-        }
-        breakfast+="\n"; lunch+="\n"; dinner+="\n";
-    }
+    	private static void parseHaksik() throws Exception {
+        	String haksik = "[학식]", tmp;
+        	Elements menu = jsoupConnect(address+2);
+        	int i=0;
+        	for (Element res : menu) {
+            		tmp = removeBracket(res.text());
+            		if(i==0) breakfast+=(haksik+" "+tmp+"\n"); //조식
+            		else if(i<6) lunch+=(haksik+" "+tmp+"\n"); //중식
+            		else dinner+=(haksik+" "+tmp+"\n"); //석식
+            		i++;
+            		if(i>8) break; //학식 중국집 메뉴는 출력 안한다.
+        	}
+        	breakfast+="\n"; lunch+="\n"; dinner+="\n"
+	}
 	
-  //교직원식당
-    private static void parseFaculty() throws Exception{
-        String faculty = "[교직원]", tmp;
-        Elements menu = jsoupConnect(address+3);
-        int i=0;
-        for(Element res : menu){
-            tmp = removeBracket(res.text());tmp = tmp.substring(tmp.indexOf(']')+1).trim();
-            if(i>2) dinner+=(faculty+" "+tmp+"\n");//석식
-            else lunch+=(faculty+" "+tmp+"\n");//중식
-            i++;
-        }
-        lunch+="\n"; dinner+="\n";
-    }
+  	//교직원식당
+    	private static void parseFaculty() throws Exception{
+        	String faculty = "[교직원]", tmp;
+        	Elements menu = jsoupConnect(address+3);
+        	int i=0;
+		for(Element res : menu){
+		    tmp = removeBracket(res.text());tmp = tmp.substring(tmp.indexOf(']')+1).trim();
+		    if(i>2) dinner+=(faculty+" "+tmp+"\n");//석식
+		    else lunch+=(faculty+" "+tmp+"\n");//중식
+		    i++;
+		}
+		lunch+="\n"; dinner+="\n";
+	}
 	
-  //청향
-    private static void parseChunghyang() throws Exception{
-        String chunghyang = "[청향]", tmp;
-        Elements menu = jsoupConnect(address+4);
-        //청향은 중식만 운영
-        for(Element res : menu){
-            tmp = removeBracket(res.text());
-            lunch+=(chunghyang+" "+tmp+"\n");
-        }
-        lunch+="\n";
-    }
+	//청향
+	private static void parseChunghyang() throws Exception{
+		String chunghyang = "[청향]", tmp;
+		Elements menu = jsoupConnect(address+4);
+		//청향은 중식만 운영
+		for(Element res : menu){
+		    tmp = removeBracket(res.text());
+		    lunch+=(chunghyang+" "+tmp+"\n");
+		}
+		lunch+="\n";
+	}
 	
 	//파싱한 메뉴 출력
 	private static void printAll(){
